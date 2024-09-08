@@ -1,27 +1,17 @@
 <template>
 
   <!-- 모달창 :: S -->
-  <div class="black-bg" v-if="modal == true">
-    <div class="white-bg">
-      <div class="close close-x" @click="modal = false"></div>
-      <h4>상세페이지</h4>
-      <p>내용</p>
-    </div>
-  </div>
+  <Modal :oneroom="oneroom" v-bind:target="target" :modal="modal"/>
   <!-- 모달창 :: E -->
 
   <div class="menu">
     <a v-for="item in menus" :key="item">{{item}}</a>
   </div>
 
-  <!-- for문 사용하기 -->
-  <div v-for="(item,index) in oneroom" :key="index">
-    <img class="room-img" :src="item.image" :alt="index"/>
-    <h4 @click="modal = true">{{item.title}}</h4>
-    <p>{{item.content}}</p>
-    <p>{{item.price}} 만원</p>
-    <!-- <button v-on:click="increase(index)">허위매물신고</button> <span>신고수 : {{item.count}}</span> -->
-  </div> 
+  <Discount v-bind="object"/> <!--하단과 동일-->
+  <!-- <Discount :name="object.name" :age="object.age"/> -->
+
+  <Card v-for="(item,index) in oneroom" :key="index" :item="item" :index="index"/>
   
 </template>
 
@@ -34,6 +24,9 @@ apple2;
 */
 
 import data from './oneroom.js';
+import discount from './Discount.vue'
+import modal from './Modal.vue'
+import card from './Card.vue'
 
 export default {
   name: 'App',
@@ -41,7 +34,9 @@ export default {
   data(){
     //데이터는 object 자료로 저장 (예) {자료이름:자료내용})
     return {
-      oneroom : data
+      object : {name : 'kim', age : 20}
+      , oneroom : data
+      , target : 0
       , modal : false
       , menus : ['Home', 'Shop', 'About']
       , lists : [{product:'역삼동원룸'
@@ -55,50 +50,22 @@ export default {
                       , img : require("./assets/room3.jpg")}]
     }
   },
+  //메소드 등록
   methods : {
     increase(index){
       this.lists[index].count += 1; //this : object를 의미
     }
   },
+  //컴포넌트 등록
   components: {
+    Discount : discount,
+    Modal : modal,
+    Card : card
   }
 }
 </script>
 
 <style>
-/* 모달창 :: S */
-body{
-  margin: 0;
-}
-.close {
-  float:inline-end;
-  width:50px;
-  height:50px;
-  text-align:center;
-}
-.close-x:after{
-  content: "\00d7"; 
-  font-size:25pt;
-  line-height:45px;
-}
-div{
-  box-sizing: border-box;
-}
-.black-bg{
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  position: fixed;
-  padding: 20px;
-}
-.white-bg{
-  width: 100%;
-  background: white;
-  border-radius: 8px;
-  padding: 20px;
-}
-/* 모달창 :: E */
-
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -114,9 +81,5 @@ div{
 .menu a{
   color: white;
   padding: 10px;
-}
-.room-img{
-  width: 100%;
-  margin-top: 40px;
 }
 </style>

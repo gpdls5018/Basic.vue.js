@@ -4,7 +4,7 @@ var apple2 = 100;
 //export default apple //단건 내보내기
 export {apple,apple2} //다건 내보내기*/
 
-export default[{
+export default [{
     id : 0,
     title: "Sinrim station 30 meters away",
     image: "https://codingapple1.github.io/vue/room0.jpg",
